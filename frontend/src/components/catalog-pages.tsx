@@ -70,7 +70,7 @@ export function StrategiesPage({ id }: { id?: string }) {
   return <div className="space-y-6">
     {id && <Back href="/strategies" label="全部策略" />}
     <PageTitle eyebrow={id ? "STRATEGY DETAIL" : "STRATEGY LIBRARY"} title={strategy?.definition.name ?? (id ? "策略详情" : "策略库")} description={strategy?.description ?? "策略把因子组合成选股条件，用于筛选和排序股票。选择一种策略，了解它的逻辑，再调整参数、预览规则。"} />
-    <Card className="p-6 shadow-none"><h2 className="font-semibold">策略用来做什么？</h2><p className="text-sm leading-6 text-muted-foreground">因子衡量股票的某个特征，策略决定用哪些因子、设置什么条件，以及入选后如何排序。例如，动量策略可以要求区间收益为正、价格高于 20 日均线，再按收益从高到低排列。</p><p className="text-sm leading-6 text-muted-foreground">当前页面用于了解策略、调整参数和预览筛选规则。点击“校验并预览规则”只会更新规则，不会生成选股结果。买卖时机、仓位管理与回测尚未实现。</p></Card>
+    <Card className="p-6 shadow-none"><h2 className="font-semibold">策略用来做什么？</h2><p className="text-sm leading-6 text-muted-foreground">因子衡量股票的某个特征，策略决定用哪些因子、设置什么条件，以及入选后如何排序。例如，动量策略可以要求区间收益为正、价格高于 20 日均线，再按收益从高到低排列。</p><p className="text-sm leading-6 text-muted-foreground">当前页面用于了解策略、调整参数和预览筛选规则。点击“校验并预览规则”只会更新规则，不会生成选股结果。动量策略已提供独立的周调仓研究回测，页面参数暂不用于回测。</p></Card>
     {loading && <Card role="status" className="p-8 text-sm text-muted-foreground">正在加载策略…</Card>}
     {error && <Card role="alert" className="p-5 shadow-none"><p className="whitespace-pre-wrap text-sm text-destructive">{error}</p>{!strategy && <Button variant="outline" onClick={() => setRetry((value) => value + 1)}><RefreshCw size={14} />重试</Button>}</Card>}
     {!loading && !id && !error && <div className="grid gap-4 lg:grid-cols-3">{items.map((item, index) => <a href={`/strategies/${item.id}`} key={item.id} className="group"><Card className="h-full p-6 shadow-none transition-colors group-hover:border-primary"><div className="flex justify-between"><span className="mono text-xs text-primary">0{index + 1} / SCREENING</span><ArrowUpRight size={17} className="text-muted-foreground" /></div><h2 className="text-xl font-semibold">{item.definition.name}</h2><p className="text-sm leading-6 text-muted-foreground">{item.description}</p><div className="mt-auto flex gap-3 border-t pt-4 text-xs text-muted-foreground"><span>{item.definition.conditions.length} 条规则</span><span>参数可选</span></div></Card></a>)}</div>}
@@ -94,7 +94,7 @@ export function StrategiesPage({ id }: { id?: string }) {
 export function BacktestsPage({ id }: { id?: string }) {
   if (id) return <NotFound title="未找到回测记录" description="目前还没有生成回测记录。" href="/backtests" />;
   return <div className="space-y-6"><PageTitle eyebrow="BACKTEST LAB" title="回测" description="在历史行情中检验策略。后续将在这里管理回测任务，比较收益、风险与交易表现。" />
-    <Card className="items-center p-12 text-center shadow-none"><div className="rounded-full bg-secondary p-4 text-primary"><FlaskConical size={28} /></div><h2 className="text-xl font-semibold">回测模块待实现</h2><p className="max-w-md text-sm leading-6 text-muted-foreground">回测引擎尚未接入。完成后可选择策略与参数，并查看收益曲线、绩效指标和交易记录。</p><a href="/strategies" className="mt-2 text-sm font-medium text-primary">先查看策略 →</a></Card>
+    <Card className="items-center p-12 text-center shadow-none"><div className="rounded-full bg-secondary p-4 text-primary"><FlaskConical size={28} /></div><h2 className="text-xl font-semibold">回测页面待接入</h2><p className="max-w-md text-sm leading-6 text-muted-foreground">动量策略已支持周调仓研究回测，可通过后端接口运行并查看指标、每日资产和交易记录。此页面暂不保存或展示回测结果。</p><a href="/strategies" className="mt-2 text-sm font-medium text-primary">先查看策略 →</a></Card>
   </div>;
 }
 

@@ -6,6 +6,8 @@ from pydantic import ValidationError
 from strategies.low_volatility import strategy as low_volatility
 from strategies.mean_reversion import strategy as mean_reversion
 from strategies.momentum import strategy as momentum
+from strategies.momentum.backtest import Parameters as MomentumBacktestParameters
+from strategies.momentum.backtest import run as run_momentum_backtest
 
 router = APIRouter(prefix="/api/strategies", tags=["strategies"])
 
@@ -42,3 +44,12 @@ def preview_strategy(strategy_id: str, parameters: dict) -> dict:
             {"loc": ["body", *error["loc"]], "msg": error["msg"], "type": error["type"]} for error in exc.errors()
         ]
         raise HTTPException(status_code=422, detail=errors) from exc
+
+
+@router.post("/momentum/backtest")
+def momentum_backtest(parameters: MomentumBacktestParameters) -> dict:
+    """执行动量策略自己的周调仓回测。"""
+    try:
+        return run_momentum_backtest(parameters.model_dump())
+    except (FileNotFoundError, ValueError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
